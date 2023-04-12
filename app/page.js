@@ -1,102 +1,71 @@
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
-import styles from './page.module.css'
+'use client';
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import LoadingPage from './loading';
+import Courses from './componets/Courses';
+import CourseSearch from './componets/CourseSearch';
 
-const inter = Inter({ subsets: ['latin'] })
+const HomePage = () => {
+  const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-export default function Home() {
+  useEffect(() => {
+    const fetchCourses = async () => {
+      const res = await fetch('/api/courses');
+      const data = await res.json();
+      setCourses(data);
+      setLoading(false);
+    };
+
+    fetchCourses();
+  }, []);
+
+  if (loading) {
+    return <LoadingPage />;
+  }
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <div className='relative isolate px-6 pt-1 lg:px-8'>
+      <div className='mx-auto max-w-2xl py-2 sm:py-4 lg:py-6'>
+        <div className='text-center'>
+          <h1 className='text-3xl font-bold tracking-tight text-gray-900 sm:text-6xl'>
+            Nextjs 13 AppDir with Tailwind css
+          </h1>
+          <p className='mt-6 text-lg leading-8 text-gray-600'>
+            Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo. Elit sunt amet
+            fugiat veniam occaecat fugiat aliqua.
+          </p>
+          <div className='mt-10 flex items-center justify-center gap-x-6'>
+            <a
+              href='#'
+              className='rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
+            >
+              Get started
+            </a>
+            <a href='#' className='text-sm font-semibold leading-6 text-gray-900'>
+              Learn more <span aria-hidden='true'>→</span>
+            </a>
+          </div>
         </div>
       </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
+      <div className='py-2'>
+        <button className='btn btn-primary p-2 m-3'><Link href='courses/addCourse'>Add New Course</Link></button>
+        <CourseSearch getSearchResults={(results) => setCourses(results)} />
+        <Courses courses={courses} />
+      </div>
+      <div
+        className='absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]'
+        aria-hidden='true'
+      >
+        <div
+          className='relative left-[calc(50%+3rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]'
+          style={{
+            clipPath:
+              'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
+          }}
         />
       </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://beta.nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+    </div>
   )
-}
+};
+export default HomePage;
